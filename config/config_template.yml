@@ -1,0 +1,196 @@
+project:
+  name: "SF3A2_transcriptomics"
+  seed: 12345
+
+paths:
+  short_reads:
+    nf54_10x: "data/short_reads/raw/NF54_gam"
+    sf3a2_10x: "data/short_reads/raw/PB16_gam"
+    mca_metadata: "data/short_reads/reference/MCA_metadata.csv"
+    mca_counts: "data/short_reads/reference/MCA_rawcounts.csv"
+    objects: "results/short_reads/objects"
+    figures: "results/short_reads/figures"
+    tables: "results/short_reads/tables"
+
+  long_reads:
+    genome_fasta: "data/long_reads/genome/PlasmoDB-68_Pfalciparum3D7_Genome.fasta"
+    gtf: "data/long_reads/genome/PlasmoDB-68_Pfalciparum3D7.gtf"
+
+    nf54_junctions_txt: "data/long_reads/sqanti3/NF54_junctions.txt"
+    sf3a2_junctions_txt: "data/long_reads/sqanti3/SF3A2_junctions.txt"
+
+    nf54_junctions_pbid: "data/long_reads/sqanti3/NF54_junction_rows_with_PBID_FL_support.tsv"
+    sf3a2_junctions_pbid: "data/long_reads/sqanti3/SF3A2_junction_rows_with_PBID_FL_support.tsv"
+
+    nf54_junctions_pbid_xlsx: "data/long_reads/sqanti3/NF54_junction_rows_with_PBID_FL_support.xlsx"
+    sf3a2_junctions_pbid_xlsx: "data/long_reads/sqanti3/SF3A2_junction_rows_with_PBID_FL_support.xlsx"
+
+    nf54_gene_annotated_junctions: "data/long_reads/sqanti3/NF54_junction_rows_with_gene_ids.tsv"
+    sf3a2_gene_annotated_junctions: "data/long_reads/sqanti3/SF3A2_junction_rows_with_gene_ids.tsv"
+
+    stage_bam_map: "config/longread_stage_bam_map_template.csv"
+
+    tables: "results/long_reads/tables"
+    figures: "results/long_reads/figures"
+    motif: "results/long_reads/motif"
+
+    sf3a2_strict_novel_target_summary: "results/long_reads/tables/SF3A2_strict_novel_target_junction_sequences"
+    sf3a2_junctions_no_artifacts_no_na_stage: "data/long_reads/sqanti3/SF3A2_junction_rows_with_PBID_FL_support_noArtifacts_noNAstage.tsv"
+    nf54_junctions_no_artifacts_no_na_stage: "data/long_reads/sqanti3/NF54_junction_rows_with_PBID_FL_support_noArtifacts_noNAstage.tsv"
+
+qc:
+  min_cells: 3
+  min_features: 200
+  min_nFeature_RNA: 300
+  max_nFeature_RNA: 2000
+  max_percent_mt:
+    NF54: 3
+    SF3A2: 0.7
+  mt_pattern: "MIT"
+
+seurat:
+  variable_features_sample: 2000
+  variable_features_integrated: 1000
+  dims: 22
+  resolution: 0.2
+
+doubletfinder:
+  expected_rate: 0.08
+  pN: 0.25
+  pK:
+    NF54: 0.02
+    SF3A2: 0.01
+
+clusters:
+  full_cluster_map:
+    "0": "EG"
+    "1": "LT"
+    "2": "ET"
+    "3": "FG"
+    "4": "ES"
+    "5": "LS"
+    "6": "MG"
+
+  full_stage_order: ["ER", "LR", "ET", "LT", "ES", "LS", "EG", "FG", "MG"]
+  asexual_stages: ["ER", "LR", "ET", "LT", "ES", "LS"]
+  gametocyte_stages_short: ["EG", "FG", "MG"]
+  gametocyte_stages_induced: ["SP", "EF", "EM"]
+
+colors:
+  clusters:
+    ER: "#1f78b4"
+    LR: "#a6cee3"
+    ET: "#cab2d6"
+    LT: "#6a3d9a"
+    ES: "#b2df8a"
+    LS: "#33a02c"
+    EG: "#B2BEB5"
+    FG: "#FFA500"
+    MG: "#0000FF"
+    SP: "#B2BEB5"
+    EF: "#FFA500"
+    EM: "#0000FF"
+  genotype:
+    NF54: "#3366CC"
+    SF3A2: "#FF9900"
+
+mca:
+  exclude_stages: ["gametocyte (female) LE", "gametocyte (male) LE"]
+
+long_reads:
+  min_pbid_fl_support: 3
+  min_pbid_fl_cpm: 1
+  strict_min_pbid_fl_support: 10
+  remove_rts: true
+  remove_indel: true
+  remove_bite: true
+  excluded_structural_categories:
+    - "novel_not_in_catalog"
+    - "incomplete_splice_match"
+    - "intergenic"
+    - "novel_in_catalog"
+  stage_levels: ["ER", "LR", "ET", "LT", "ES", "LS", "SP", "EF", "EM"]
+  positive_mode: "all_novel"
+  windows:
+    donor: [-3, 20]
+    acceptor_bpaware: [-60, 6]
+    branchpoint_focus: [-50, -10]
+  target_genes: ["PF3D7_1438800", "PF3D7_1343000"]
+
+genes:
+  representative:
+    PF3D7-1122200: "JmjC3"
+    PF3D7-1438800: "MD1"
+    PF3D7-1146800: "FD2"
+
+  asexual_heatmap:
+    PF3D7-1301600: "EBA140"
+    PF3D7-1301800: "SURF13.1"
+    PF3D7-1334500: "MSRP6"
+    PF3D7-1335100: "MSP7"
+    PF3D7-1335300: "RH2b"
+    PF3D7-1370300: "MAHRP1"
+    PF3D7-1372200: "HRPIII"
+    PF3D7-0207400: "SERA7"
+    PF3D7-0207500: "SERA6"
+    PF3D7-0207600: "SERA5"
+    PF3D7-0207700: "SERA4"
+    PF3D7-0214900: "RON6"
+    PF3D7-1102800: "ETRAMP11.2"
+    PF3D7-1121600: "EXP1"
+    PF3D7-0501300: "SBP1"
+    PF3D7-0532100: "ETRAMP5"
+    PF3D7-0533100: "VAR1CSA"
+    PF3D7-0818900: "HSP70"
+    PF3D7-0830800: "SURF8.2"
+    PF3D7-0831700: "HSP70x"
+    PF3D7-1001500: "ETRAMP10"
+    PF3D7-1016300: "GBP130"
+    PF3D7-1028700: "MTRAP"
+    PF3D7-1033200: "ETRAMP10.2"
+    PF3D7-0402200: "SURF4.1"
+    PF3D7-0423700: "ETRAMP4"
+    PF3D7-0302200: "CLAG3.2"
+    PF3D7-0302500: "CLAG3.1"
+    PF3D7-0310400: "PIESP1"
+    PF3D7-1228600: "MSP9"
+    PF3D7-0902800: "SERA9"
+    PF3D7-0930300: "MSP1"
+    PF3D7-0936300: "REX3"
+    PF3D7-1401400: "ETRAMP14"
+    PF3D7-1452000: "RON2"
+    PF3D7-0102200: "RESA"
+    PF3D7-0102500: "EBA181"
+
+  gametocyte_heatmap:
+    PF3D7-0109000: "PHIL1"
+    PF3D7-0209000: "P230"
+    PF3D7-0320200: "CPW-WPC"
+    PF3D7-0422300: "alpha tubulin 2"
+    PF3D7-0719200: "NEK4"
+    PF3D7-1102700: "ETRAMP11.1"
+    PF3D7-1102800: "ETRAMP11.2"
+    PF3D7-0423700: "ETRAMP4"
+    PF3D7-1001500: "ETRAMP10"
+    PF3D7-1401400: "ETRAMP14"
+    PF3D7-0202500: "ETRAMP2"
+    PF3D7-1471600: "Apr2"
+    PF3D7-1343000: "PMT"
+    PF3D7-0903800: "CCp4"
+    PF3D7-0936600: "GEXP5"
+    PF3D7-1031000: "P25"
+    PF3D7-1038400: "Pf11-1"
+    PF3D7-1102500: "GEXP02"
+    PF3D7-1146800: "FD2"
+    PF3D7-1253000: "GECO"
+    PF3D7-1302100: "G27/25"
+    PF3D7-1319600: "FD3"
+    PF3D7-1407000: "CCp3"
+    PF3D7-1426500: "ABCG2"
+    PF3D7-1438800: "MD1"
+    PF3D7-1473700: "NUP116"
+    PF3D7-1469900: "MGET"
+    PF3D7-1105100: "H2B"
+    PF3D7-1122200: "JmjC3"
+    PF3D7-0617800: "H2A"
+    PF3D7-0415800: "PIC3"
